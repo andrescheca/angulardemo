@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<!--[if lt IE 7]>		<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>			<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>			<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>Angular mini demo</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css">
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+	</head>
+	<body ng-app="appName">
+		<!--[if lt IE 7]>
+			<p>You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+		<![endif]-->
+		<section ng-controller="myController" class="container">
+			<h4>Este es un demo para modificar a tiempo real el DOM con Angular 2 way binding</h4>
+			<input type="text" name="variableData" ng-model="variable">
+			<span>Este es el contenido de la variable: {{variable}}</span>
+		</section>
+		<br/>
+		<section ng-controller="myOtherController" class="container">
+			<h4>Otro demo con otro controlador</h4>
+			<select ng-model="otherVariable" ng-change="onChangeFunction(otherVariable)">
+				<option value="value1">Opción 1</option>
+				<option value="value2">Opción 2</option>
+				<option value="value3">Opción 3</option>
+				<option value="value4">Opción 4</option>
+				<option value="value5">Opción 5</option>
+			</select>
+			<span>Este es el contenido de la variable: {{otherVariable}}</span>
+			<section>
+				<h5>Info de un objeto con el key del select de arriba que solo funciona en onChange.</h5>
+				{{selectedOption}}
+				<h5>Otra forma de mostrar la info</h5>
+				{{functionInScope(otherVariable)}}
+				<h5>Y otra forma de mostrar la info</h5>
+				<p><b>Nombre:</b> {{selectedOption.name}}</p>
+				<p ng-style="{color: selectedOption.color}"><b>Color:</b> {{selectedOption.color}}</p>
+				<p><b>Precio:</b> {{selectedOption.price}}</p>
+			</section>
+		</section>
+		<script type="text/javascript" src="//code.jquery.com/jquery-1.12.0.min.js"></script>
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.8/angular.min.js"></script>
+		<!-- Esto debería estar en js/app.js e incluirlo primero-->
+		<script type="text/javascript">
+			// Escribo esto para aquí poner la configuración de la app
+			angular.module('appName', ['appName.controllers']);
+		</script>
+		<!-- Esto debería estar en js/controllers.js e incluirlo despues de app.js-->
+		<script type="text/javascript">
+			// Aquí van los controladores
+			angular.module('appName.controllers', [])
+			.controller('myController', ['$scope', function ($scope) {
+				$scope.variable = '';
+			}])
+			.controller('myOtherController', ['$scope', function ($scope) {
+				// Si quiero que tenga valor por defecto asigno un valor al declararla
+				// $scope.otherVariable = 'value1';
+				$scope.otherVariable = '';
+				$scope.dupleLikeObject = {
+					value1: {name: 'Nombre producto 1', color: 'blue', price: '$5.00'},
+					value2: {name: 'Nombre producto 2', color: 'yellow', price: '$4.00'},
+					value3: {name: 'Nombre producto 3', color: 'green', price: '$8.00'},
+					value4: {name: 'Nombre producto 4', color: 'red', price: '$6.00'},
+					value5: {name: 'Nombre producto 5', color: 'purple', price: '$1.00'},
+				}
+				$scope.selectedOption = {};
+				// Una funcion en angular para poder utilizarla en HTML
+				$scope.onChangeFunction = function (aVariable) {
+					$scope.selectedOption = $scope.dupleLikeObject[aVariable];
+				}
+				// Una funcion en angular para poder utilizarla en HTML
+				$scope.functionInScope = function (aVariable) {
+					if (aVariable) {
+						return $scope.dupleLikeObject[aVariable];
+					} else {
+						return '';
+					}
+				}
+			}]);
+		</script>
+	</body>
+</html>
